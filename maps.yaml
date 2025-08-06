@@ -1,0 +1,50 @@
+# 🎯 AI-läsbart systemregister för Actor Showcase
+
+main:
+  syfte: "FastAPI-applikation som exponerar REST API för skådespelardata"
+  input: "HTTP requests till /actors och /actors/{id} endpoints"
+  output: "JSON responses med skådespelardata och API dokumentation"
+  trigger: "make api - startar uvicorn server"
+  anrop: "http://localhost:8000/actors för att hämta alla skådespelare"
+
+services/actors:
+  syfte: "Business logic för att hantera skådespelardata och returnera strukturerad information"
+  input: "Funktionsanrop från API endpoints"
+  output: "Lista av Actor-objekt eller enskild Actor"
+  beroenden: "models/actor för datastruktur"
+  anrop: "get_actors() returnerar alla skådespelare, get_actor_by_id(id) returnerar specifik"
+
+models/actor:
+  syfte: "Pydantic-modell som definierar datastruktur för skådespelare"
+  input: "Dictionary med skådespelardata (id, name, birth_year, country, oscars)"
+  output: "Validerat Actor-objekt med typning"
+  format: "Pydantic BaseModel med int, str fält"
+  test: "Automatisk validering vid skapande av Actor-objekt"
+
+ui/src/App:
+  syfte: "React-komponent som visar skådespelare i grid-layout med loading states"
+  input: "API responses från backend /actors endpoint"
+  output: "Rendering av ActorCard-komponenter med felhantering"
+  beroenden: "ActorCard-komponent, shadcn/ui Button"
+  trigger: "npm run dev i ui-mappen"
+
+ui/src/components/ActorCard:
+  syfte: "Visar enskild skådespelare med namn, land, födelseår och Oscar-staty"
+  input: "Actor-objekt med id, name, birth_year, country, oscars"
+  output: "Card-komponent med formaterad skådespelarinformation"
+  beroenden: "shadcn/ui Card, Badge komponenter"
+  format: "TypeScript interface Actor med alla fält"
+
+Makefile:
+  syfte: "Orchestrerar projektets kommandon för setup, körning och dokumentation"
+  input: "make-kommandon (help, api, ui, setup, test, docs)"
+  output: "Feedback med emojis och startar relevanta processer"
+  trigger: "make help visar alla tillgängliga kommandon"
+  anrop: "make api startar backend, make ui startar frontend"
+
+setup.sh:
+  syfte: "Automatiserar installation av dependencies och skapar frontend-struktur"
+  input: "Körning i WSL-miljö från projektets rot"
+  output: "Installerad backend och frontend med alla dependencies"
+  trigger: "bash setup.sh från projektets rotmapp"
+  test: "Kontrollerar att main.py finns och att npm/uv är tillgängliga" 
