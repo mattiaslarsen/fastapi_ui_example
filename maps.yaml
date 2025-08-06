@@ -57,12 +57,20 @@ ui/src/types/api:
   trigger: "make types-generate - genererar från OpenAPI"
   format: "Automatiskt genererade types från backend Pydantic-modeller"
 
+streamlit:
+  syfte: "Streamlit demo - pure presentation från samma API som React-frontend"
+  input: "HTTP requests till backend API endpoints"
+  output: "Streamlit UI med tabeller och statistik från API"
+  beroenden: "requests för API-anrop, pandas för data-visning"
+  trigger: "make streamlit - startar Streamlit på port 8501"
+  format: "Pure presentation utan business logic - visar samma data som React"
+
 Makefile:
   syfte: "Orchestrerar projektets kommandon för setup, körning, dokumentation och type-generering"
-  input: "make-kommandon (help, api, ui, setup, test, docs, types)"
+  input: "make-kommandon (help, api, ui, setup, test, docs, types, streamlit)"
   output: "Feedback med emojis och startar relevanta processer"
   trigger: "make help visar alla tillgängliga kommandon"
-  anrop: "make api startar backend, make ui startar frontend, make types genererar TypeScript"
+  anrop: "make api startar backend, make ui startar frontend, make types genererar TypeScript, make streamlit startar demo"
 
 setup.sh:
   syfte: "Automatiserar installation av dependencies och skapar frontend-struktur"

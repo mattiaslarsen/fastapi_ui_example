@@ -1,4 +1,4 @@
-.PHONY: help api ui sync test docs clean fresh reset venv activate frontend validate validate-api validate-ui validate-full types types-generate types-sync api-types ui-types
+.PHONY: help api ui sync test docs clean fresh reset venv activate frontend validate validate-api validate-ui validate-full types types-generate types-sync api-types ui-types streamlit
 
 help:
 	@echo "🎬 Actor Showcase – Vad vill du göra?"
@@ -10,6 +10,7 @@ help:
 	@echo "  make api-types – Startar backend + genererar types automatiskt"
 	@echo "  make ui        – Startar UI med Vite"
 	@echo "  make ui-types  – Genererar types + startar UI"
+	@echo "  make streamlit – Startar Streamlit demo (pure presentation)"
 	@echo "  make test      – Kör alla tester"
 	@echo "  make docs      – Öppnar API dokumentation"
 	@echo ""
@@ -75,6 +76,12 @@ ui-types:
 	@echo ""
 	@echo "🎨 Startar UI (Vite)..."
 	@cd ui && npm run dev
+
+streamlit:
+	@echo "🎬 Startar Streamlit demo (pure presentation)..."
+	@echo "📊 Visar samma data som React-frontend"
+	@echo "🔗 Använder API från make api-types"
+	@uv run streamlit run streamlit.py --server.port 8501
 
 test:
 	@echo "🧪 Kör tester..."
@@ -190,6 +197,7 @@ fresh: clean
 	@echo "🐍 Nästa steg:"
 	@echo "  make api-types - Startar backend + genererar types"
 	@echo "  make ui-types  - Genererar types + startar frontend"
+	@echo "  make streamlit - Startar Streamlit demo"
 	@echo "  make activate  - Visar venv-kommando"
 	@echo ""
 	@echo "💡 Tips: Använd 'make api-types' för automatisk type-generering!"
