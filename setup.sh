@@ -1,25 +1,17 @@
 #!/bin/bash
 
-# 🎬 Actor Showcase Setup Script
-# Kör detta i din WSL-miljö för att sätta upp hela projektet
+# 🎨 Frontend Setup Script
+# Kör detta för att sätta upp React + Tailwind + shadcn/ui
 
 set -e  # Stoppa vid fel
 
-echo "🎬 Actor Showcase - Setup Script"
-echo "================================"
+echo "🎨 Frontend Setup Script"
+echo "========================"
 
 # Kontrollera att vi är i rätt mapp
 if [ ! -f "main.py" ]; then
     echo "❌ Fel: Kör detta skript från projektets rotmapp"
     exit 1
-fi
-
-echo "📦 Installerar Python dependencies..."
-if command -v uv &> /dev/null; then
-    uv sync
-else
-    echo "⚠️  uv inte installerat, använder pip..."
-    pip install fastapi uvicorn pydantic
 fi
 
 echo "🎨 Skapar frontend med Vite..."
@@ -38,9 +30,9 @@ if command -v npm &> /dev/null; then
     cd ui
     npm install
     
-    # Installera Tailwind CSS
+    # Installera Tailwind CSS med rätt PostCSS plugin
     echo "🎨 Installerar Tailwind CSS..."
-    npm install -D tailwindcss postcss autoprefixer
+    npm install -D tailwindcss @tailwindcss/postcss postcss autoprefixer
     
     # Skapa Tailwind och PostCSS config-filer direkt
     echo "⚙️  Konfigurerar Tailwind CSS..."
@@ -58,11 +50,11 @@ export default {
 }
 EOF
     
-    # Konfigurera PostCSS
+    # Konfigurera PostCSS med rätt plugin för Tailwind v4
     cat > postcss.config.js << 'EOF'
 export default {
   plugins: {
-    tailwindcss: {},
+    '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
 }
@@ -152,13 +144,8 @@ else
     exit 1
 fi
 
-echo "✅ Setup klar!"
+echo "✅ Frontend setup klar!"
 echo ""
-echo "🚀 Kör följande kommandon:"
-echo "  make api    - Startar backend"
-echo "  make ui     - Startar frontend (i annan terminal)"
-echo "  make help   - Visa alla kommandon"
-echo ""
-echo "🌐 Backend: http://localhost:8000"
 echo "🎨 Frontend: http://localhost:5173"
-echo "📚 API Docs: http://localhost:8000/docs" 
+echo "💡 Kör 'make setup' för backend dependencies"
+echo "💡 Kör 'make fresh' för båda tillsammans" 
