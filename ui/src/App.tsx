@@ -6,6 +6,7 @@ import './App.css'
 function App() {
   const { actors, loading, error, refetch } = useActors()
 
+  // Pure presentation - ingen logik
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -26,7 +27,7 @@ function App() {
           <p className="text-sm text-gray-500 mb-4">
             Kontrollera att backend körs med: <code className="bg-gray-200 px-2 py-1 rounded">make api</code>
           </p>
-          <Button onClick={fetchActors} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={refetch} className="bg-blue-600 hover:bg-blue-700">
             Försök igen
           </Button>
         </div>

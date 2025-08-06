@@ -1,18 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
-
-interface Actor {
-  id: number
-  name: string
-  birth_year: number
-  country: string
-  oscars: number
-}
+import { Actor } from "../types/actor"
 
 interface ActorCardProps {
   actor: Actor
 }
 
+// Pure presentation component - ingen logik
 export function ActorCard({ actor }: ActorCardProps) {
   return (
     <Card className="w-full max-w-sm">

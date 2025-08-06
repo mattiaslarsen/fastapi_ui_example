@@ -1,18 +1,18 @@
 # 🎯 AI-läsbart systemregister för Actor Showcase
 
 main:
-  syfte: "FastAPI-applikation som exponerar REST API för skådespelardata"
-  input: "HTTP requests till /actors och /actors/{id} endpoints"
-  output: "JSON responses med skådespelardata och API dokumentation"
+  syfte: "FastAPI-applikation som hanterar all logik och returnerar strukturerad data för UI"
+  input: "HTTP requests till /actors, /stats, /actors/country/{country} endpoints"
+  output: "Strukturerade JSON responses med success/error states och formaterad data"
   trigger: "make api - startar uvicorn server"
-  anrop: "http://localhost:8000/actors för att hämta alla skådespelare"
+  anrop: "http://localhost:8000/actors för att hämta alla skådespelare med metadata"
 
 services/actors:
-  syfte: "Business logic för att hantera skådespelardata och returnera strukturerad information"
-  input: "Funktionsanrop från API endpoints"
-  output: "Lista av Actor-objekt eller enskild Actor"
+  syfte: "Business logic för skådespelardata - validering, filtrering, statistik och dataformatering"
+  input: "Funktionsanrop från API endpoints med parametrar"
+  output: "Validerade Actor-objekt, filtrerade listor, statistik och strukturerad data"
   beroenden: "models/actor för datastruktur"
-  anrop: "get_actors() returnerar alla skådespelare, get_actor_by_id(id) returnerar specifik"
+  anrop: "get_actors(), get_actor_by_id(id), get_actors_by_country(country), get_oscar_winners(), get_actor_stats()"
 
 models/actor:
   syfte: "Pydantic-modell som definierar datastruktur för skådespelare"
@@ -22,18 +22,31 @@ models/actor:
   test: "Automatisk validering vid skapande av Actor-objekt"
 
 ui/src/App:
-  syfte: "React-komponent som visar skådespelare i grid-layout med loading states"
-  input: "API responses från backend /actors endpoint"
-  output: "Rendering av ActorCard-komponenter med felhantering"
-  beroenden: "ActorCard-komponent, shadcn/ui Button"
+  syfte: "Pure presentation - visar skådespelare från API utan business logic"
+  input: "Strukturerad data från backend API responses"
+  output: "Rendering av ActorCard-komponenter med loading/error states"
+  beroenden: "ActorCard-komponent, useActors hook för data fetching"
   trigger: "npm run dev i ui-mappen"
 
+ui/src/hooks/useActors:
+  syfte: "Pure data fetching - hämtar data från API utan logik"
+  input: "API endpoint calls till backend"
+  output: "Raw data för UI-komponenter"
+  beroenden: "lib/api för fetch-anrop"
+  format: "React hook som returnerar actors, loading, error states"
+
+ui/src/lib/api:
+  syfte: "Pure data fetching layer - ingen business logic"
+  input: "API endpoint URLs"
+  output: "Raw JSON responses från backend"
+  format: "Simple fetch wrapper utan transformation"
+
 ui/src/components/ActorCard:
-  syfte: "Visar enskild skådespelare med namn, land, födelseår och Oscar-staty"
-  input: "Actor-objekt med id, name, birth_year, country, oscars"
-  output: "Card-komponent med formaterad skådespelarinformation"
+  syfte: "Pure presentation component - visar skådespelardata som den kommer från API"
+  input: "Actor-objekt från backend"
+  output: "Formaterad card-komponent med skådespelarinformation"
   beroenden: "shadcn/ui Card, Badge komponenter"
-  format: "TypeScript interface Actor med alla fält"
+  format: "TypeScript interface Actor importerad från types/"
 
 Makefile:
   syfte: "Orchestrerar projektets kommandon för setup, körning och dokumentation"
