@@ -1,39 +1,58 @@
 # 🎬 Actor Showcase
 
-En modern FastAPI + React-applikation som visar skådespelare med deras detaljer.
+AI-driven FastAPI + React applikation som följer rörlighetsprinciperna. Backend hanterar all logik, frontend visar bara.
 
 ## 🚀 Snabbstart
 
-Kör setup-skriptet i din WSL-miljö:
-
 ```bash
-chmod +x setup.sh
-./setup.sh
+make help          # Se alla kommandon
+make api-types     # Backend + automatisk type-generering
+make ui-types      # Frontend + type-synkronisering
 ```
 
-## 📁 Projektstruktur
+## 🎯 Viktiga workflows
 
-- **Backend**: FastAPI med actors service och Pydantic models
-- **Frontend**: React + TypeScript med shadcn/ui komponenter
-- **Orchestration**: Makefile med outcome-driven kommandon
+### Backend-utveckling
+```bash
+make api-types     # Startar backend + genererar types från Pydantic
+make validate-api  # Testar backend-logik
+```
 
-## 🎯 Vad gör vad
+### Frontend-utveckling  
+```bash
+make ui-types      # Genererar types + startar UI
+make validate-ui   # Testar frontend pure presentation
+```
 
-- `main.py` - FastAPI-applikation med CORS och endpoints
-- `services/actors.py` - Business logic för skådespelardata
-- `models/actor.py` - Pydantic-modell för datastruktur
-- `ui/` - React frontend med modern UI-komponenter
+### Fullstack validering
+```bash
+make validate-full # Validerar alla rörlighetsprinciper
+```
 
-## 🔧 Kommandon
+## 🏗️ Arkitektur
 
-Kör `make help` för att se alla tillgängliga kommandon.
+**Backend-logik förstärkning** - All business logic i API  
+**Frontend pure presentation** - UI visar bara data  
+**Pydantic som typmaster** - Automatisk TypeScript-generering  
+**Loose coupling** - API fungerar oberoende av UI  
 
-## 📚 Dokumentation
+## 📁 Struktur
 
-- **Systemkarta**: `maps.yaml` - AI-läsbar översikt över moduler
-- **API Docs**: http://localhost:8000/docs (efter `make api`)
-- **Frontend**: http://localhost:5173 (efter `make ui`)
+- `main.py` - FastAPI med strukturerade responses
+- `models/actor.py` - Pydantic som typmaster
+- `services/actors.py` - Business logic
+- `ui/src/` - Pure presentation components
+- `maps.yaml` - AI-läsbart systemregister
 
-## 🧩 Modulära delar
+## 🔗 Länkar
 
-Projektet är uppbyggt för att vara modulärt och AI-promptbart. Varje del har tydligt syfte och beroenden som beskrivs i `maps.yaml`. 
+- [Makefile](Makefile) - Alla kommandon och workflows
+- [maps.yaml](maps.yaml) - AI-läsbar systemkarta
+- [API docs](http://localhost:8000/docs) - Swagger UI (kör `make api` först)
+
+## 💡 Tips
+
+- Använd `make api-types` för backend-utveckling
+- Använd `make ui-types` för frontend-utveckling  
+- Kör `make validate-full` för att testa rörlighetsprinciperna
+- Se `make help` för alla kommandon 

@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
-import { Actor } from "../types/actor"
+// Importera genererade types från OpenAPI
+import type { components } from "../types/api"
+
+type Actor = components['schemas']['Actor']
 
 interface ActorCardProps {
   actor: Actor

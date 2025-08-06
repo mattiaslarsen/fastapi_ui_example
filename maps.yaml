@@ -15,11 +15,12 @@ services/actors:
   anrop: "get_actors(), get_actor_by_id(id), get_actors_by_country(country), get_oscar_winners(), get_actor_stats()"
 
 models/actor:
-  syfte: "Pydantic-modell som definierar datastruktur för skådespelare"
+  syfte: "Pydantic-modell som definierar datastruktur för skådespelare - typmaster för hela systemet"
   input: "Dictionary med skådespelardata (id, name, birth_year, country, oscars)"
-  output: "Validerat Actor-objekt med typning"
-  format: "Pydantic BaseModel med int, str fält"
+  output: "Validerat Actor-objekt med typning och OpenAPI-metadata"
+  format: "Pydantic BaseModel med Field-validators och OpenAPI-schema"
   test: "Automatisk validering vid skapande av Actor-objekt"
+  trigger: "make types - genererar TypeScript från OpenAPI"
 
 ui/src/App:
   syfte: "Pure presentation - visar skådespelare från API utan business logic"
@@ -32,7 +33,7 @@ ui/src/hooks/useActors:
   syfte: "Pure data fetching - hämtar data från API utan logik"
   input: "API endpoint calls till backend"
   output: "Raw data för UI-komponenter"
-  beroenden: "lib/api för fetch-anrop"
+  beroenden: "lib/api för fetch-anrop, genererade types från OpenAPI"
   format: "React hook som returnerar actors, loading, error states"
 
 ui/src/lib/api:
@@ -43,17 +44,25 @@ ui/src/lib/api:
 
 ui/src/components/ActorCard:
   syfte: "Pure presentation component - visar skådespelardata som den kommer från API"
-  input: "Actor-objekt från backend"
+  input: "Actor-objekt från backend (genererade types från OpenAPI)"
   output: "Formaterad card-komponent med skådespelarinformation"
   beroenden: "shadcn/ui Card, Badge komponenter"
-  format: "TypeScript interface Actor importerad från types/"
+  format: "TypeScript types genererade från Pydantic via OpenAPI"
+
+ui/src/types/api:
+  syfte: "Genererade TypeScript types från OpenAPI - synkroniserade med Pydantic"
+  input: "OpenAPI schema från FastAPI (genererat från Pydantic)"
+  output: "TypeScript interfaces för alla API responses och modeller"
+  beroenden: "openapi-typescript för generering"
+  trigger: "make types-generate - genererar från OpenAPI"
+  format: "Automatiskt genererade types från backend Pydantic-modeller"
 
 Makefile:
-  syfte: "Orchestrerar projektets kommandon för setup, körning och dokumentation"
-  input: "make-kommandon (help, api, ui, setup, test, docs)"
+  syfte: "Orchestrerar projektets kommandon för setup, körning, dokumentation och type-generering"
+  input: "make-kommandon (help, api, ui, setup, test, docs, types)"
   output: "Feedback med emojis och startar relevanta processer"
   trigger: "make help visar alla tillgängliga kommandon"
-  anrop: "make api startar backend, make ui startar frontend"
+  anrop: "make api startar backend, make ui startar frontend, make types genererar TypeScript"
 
 setup.sh:
   syfte: "Automatiserar installation av dependencies och skapar frontend-struktur"

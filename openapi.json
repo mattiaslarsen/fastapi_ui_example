@@ -1,0 +1,444 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Actor Showcase API",
+    "description": "API f\u00f6r att visa sk\u00e5despelare med deras detaljer - Pydantic som typmaster",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "root"
+        ],
+        "summary": "Read Root",
+        "operationId": "read_root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actors": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "summary": "Read Actors",
+        "description": "H\u00e4mta alla sk\u00e5despelare med strukturerad response",
+        "operationId": "read_actors_actors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActorListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actors/{actor_id}": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "summary": "Read Actor",
+        "description": "H\u00e4mta specifik sk\u00e5despelare med strukturerad response",
+        "operationId": "read_actor_actors__actor_id__get",
+        "parameters": [
+          {
+            "name": "actor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Actor Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actors/country/{country}": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "summary": "Read Actors By Country",
+        "description": "H\u00e4mta sk\u00e5despelare fr\u00e5n specifikt land",
+        "operationId": "read_actors_by_country_actors_country__country__get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActorListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actors/oscar-winners": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "summary": "Read Oscar Winners",
+        "description": "H\u00e4mta endast Oscar-vinnare",
+        "operationId": "read_oscar_winners_actors_oscar_winners_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActorListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [
+          "stats"
+        ],
+        "summary": "Read Stats",
+        "description": "H\u00e4mta statistik f\u00f6r sk\u00e5despelare",
+        "operationId": "read_stats_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status": {
+      "get": {
+        "tags": [
+          "root"
+        ],
+        "summary": "Get Api Status",
+        "description": "API status f\u00f6r frontend health check",
+        "operationId": "get_api_status_api_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APIResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indikerar om operationen lyckades",
+            "example": true
+          },
+          "data": {
+            "title": "Data",
+            "description": "Response data (kan vara null vid fel)"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Beskrivande meddelande f\u00f6r anv\u00e4ndaren",
+            "default": "",
+            "example": "Operation completed successfully"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error",
+            "description": "Felmeddelande vid misslyckad operation",
+            "example": "Resource not found"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "title": "APIResponse",
+        "description": "Standard API response f\u00f6r alla endpoints"
+      },
+      "Actor": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Id",
+            "description": "Unikt ID f\u00f6r sk\u00e5despelaren",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name",
+            "description": "Sk\u00e5despelarens fullst\u00e4ndiga namn",
+            "example": "Meryl Streep"
+          },
+          "birth_year": {
+            "type": "integer",
+            "maximum": 2024.0,
+            "minimum": 1800.0,
+            "title": "Birth Year",
+            "description": "F\u00f6delse\u00e5r f\u00f6r sk\u00e5despelaren",
+            "example": 1949
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 2,
+            "title": "Country",
+            "description": "Land d\u00e4r sk\u00e5despelaren \u00e4r f\u00f6dd eller bor",
+            "example": "USA"
+          },
+          "oscars": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Oscars",
+            "description": "Antal Oscar-priser som sk\u00e5despelaren har vunnit",
+            "example": 3
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "birth_year",
+          "country",
+          "oscars"
+        ],
+        "title": "Actor",
+        "description": "Sk\u00e5despelare med detaljerad information",
+        "examples": [
+          {
+            "birth_year": 1949,
+            "country": "USA",
+            "id": 1,
+            "name": "Meryl Streep",
+            "oscars": 3
+          },
+          {
+            "birth_year": 1957,
+            "country": "Storbritannien",
+            "id": 2,
+            "name": "Daniel Day-Lewis",
+            "oscars": 3
+          }
+        ]
+      },
+      "ActorListResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indikerar om operationen lyckades",
+            "example": true
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/Actor"
+            },
+            "type": "array",
+            "title": "Data",
+            "description": "Lista av sk\u00e5despelare",
+            "default": []
+          },
+          "total_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total Count",
+            "description": "Totalt antal sk\u00e5despelare i listan",
+            "example": 5
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Beskrivande meddelande",
+            "default": "",
+            "example": "Hittade 5 sk\u00e5despelare"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "total_count"
+        ],
+        "title": "ActorListResponse",
+        "description": "Response f\u00f6r lista av sk\u00e5despelare"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "StatsResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indikerar om operationen lyckades",
+            "example": true
+          },
+          "data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Data",
+            "description": "Statistik-data",
+            "default": {},
+            "example": {
+              "average_oscars": 3.2,
+              "countries": [
+                "USA",
+                "Storbritannien",
+                "Sverige"
+              ],
+              "total_actors": 5,
+              "total_oscars": 16,
+              "unique_countries": 3
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Beskrivande meddelande",
+            "default": "",
+            "example": "Statistik h\u00e4mtad framg\u00e5ngsrikt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "title": "StatsResponse",
+        "description": "Response f\u00f6r statistik-data"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "actors",
+      "description": "Operations med sk\u00e5despelare"
+    },
+    {
+      "name": "stats",
+      "description": "Statistik-operationer"
+    }
+  ]
+}
