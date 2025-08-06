@@ -1,41 +1,10 @@
-import { useState, useEffect } from 'react'
 import { ActorCard } from './components/ActorCard'
 import { Button } from './components/ui/button'
+import { useActors } from './hooks/useActors'
 import './App.css'
 
-interface Actor {
-  id: number
-  name: string
-  birth_year: number
-  country: string
-  oscars: number
-}
-
 function App() {
-  const [actors, setActors] = useState<Actor[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    fetchActors()
-  }, [])
-
-  const fetchActors = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const response = await fetch('http://localhost:8000/actors')
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const data = await response.json()
-      setActors(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ett fel uppstod')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { actors, loading, error, refetch } = useActors()
 
   if (loading) {
     return (
